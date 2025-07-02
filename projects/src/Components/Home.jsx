@@ -1,31 +1,43 @@
 import React from "react";
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { ProductContext } from "../util/Context";
+import Loading from "./Loading";
 
 function Home() {
-  return (
-    <div className="flex h-screen w-screen overflow-hidden"> 
-      <Navbar /> 
+  const [product] = useContext(ProductContext);
+  console.log(product);
 
-      <div className="w-[85%] p-5 flex flex-wrap gap-5 overflow-y-auto">
-        <Link to="/details/1" className="w-[18%] border shadow rounded p-3 h-[35vh] flex flex-col items-center justify-center">
-          
+  return (
+    product ? (
+      <div className="flex h-screen w-screen overflow-hidden">
+        <Navbar />
+
+        <div className="w-[85%] p-5 flex flex-wrap overflow-y-auto gap-15">
+          {product.map((p,i)=>(
+               <Link
+            to={`/details/${p.id}`}
+            className="w-[20%]  border shadow rounded p-3 h-[50vh] flex flex-col items-center justify-center"
+          >
             <div
-              className="w-full h-40 bg-cover bg-center rounded transition-transform hover:scale-105"
+              className="w-full h-50 bg-cover object-cover bg-center rounded transition-transform hover:scale-105"
               style={{
                 backgroundImage:
-                  "url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRI7EC8YE52g6Al8929cCq4I7mELiHPlzwrBQ&s)",
+                 `url(${p.image})`,
               }}
             ></div>
             <h1 className="mt-3 text-center font-medium hover:text-blue-400">
-              Lorem ipsum dolor
+             `${p.title}`
             </h1>
           </Link>
+          ))}
+         
         </div>
       </div>
-
-
-   
+    ) : (
+      <Loading />
+    )
   );
 }
 
