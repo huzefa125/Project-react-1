@@ -1,30 +1,33 @@
 import axios from './axios';
+
 import React, { useEffect, useState, createContext } from 'react';
+import { ProductProvider } from './util/Context.jsx'
 
 export const ProductContext = createContext();
 
-export function ProductProvider(props) {
+function Context(props) {
   const [product, setproduct] = useState([]);
 
   const getProduct = async () => {
     try {
-      const { data } = await axios("/products");
-      const safeData = Array.isArray(data) ? data : [data];
-      console.log("Fetched Data:", safeData);
-      setproduct(safeData);
+      const { data } = await axios ("/products"); // Use correct endpoint and instance
+      console.log(data);
+      setproduct(data);
     } catch (error) {
-      console.error("Error fetching products:", error);
-      setproduct([]);
+      console.log(error);
     }
   };
 
   useEffect(() => {
     getProduct();
   }, []);
-
+  console.log(product);
+  
   return (
     <ProductContext.Provider value={[product, setproduct]}>
       {props.children}
     </ProductContext.Provider>
   );
 }
+
+export default Context;
