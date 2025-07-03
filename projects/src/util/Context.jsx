@@ -1,19 +1,20 @@
 import axios from './axios';
-
 import React, { useEffect, useState, createContext } from 'react';
 
 export const ProductContext = createContext();
 
-function Context(props) {
+export function ProductProvider(props) {
   const [product, setproduct] = useState([]);
 
   const getProduct = async () => {
     try {
-      const { data } = await axios ("/products"); // Use correct endpoint and instance
-      console.log(data);
-      setproduct(data);
+      const { data } = await axios("/products");
+      const safeData = Array.isArray(data) ? data : [data];
+      console.log("Fetched Data:", safeData);
+      setproduct(safeData);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching products:", error);
+      setproduct([]);
     }
   };
 
@@ -27,5 +28,3 @@ function Context(props) {
     </ProductContext.Provider>
   );
 }
-
-export default Context;
